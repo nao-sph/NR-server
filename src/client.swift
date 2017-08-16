@@ -13,6 +13,9 @@ socket.on("connect") { data, ack in
     print("send message")
     socket.emit("access", name)
 }
+socket.on("waiting2P") { data, ack in
+  print("waiting")
+}
 
 socket.on("from_server") { data, ack in
     if let msg = data[0] as? String {

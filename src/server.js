@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     let roomInfo = RM.access(new Player(socket.id, name))
     switch(status[0]){ // 0:待機、1:開始、2:復帰
       case 0: //待機
-
+        socket.emit('waiting2P', null)
         break
       case 1: //バトル開始
         console.log();
