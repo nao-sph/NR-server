@@ -11,8 +11,10 @@ socket.on("connect") { data, ack in
     print("socket connected")
 
     print("send message")
+    
     socket.emit("access", name)
 }
+
 socket.on("waiting2P") { data, ack in
   print("waiting")
 }
