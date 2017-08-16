@@ -46,6 +46,7 @@ class Room {
   constructor (player) {
     this.ID = this.genRanStr(8)
     this.members = [player]
+    this.bm = null
     this.isFull = false
   }
 
