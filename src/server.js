@@ -4,9 +4,9 @@ const server = require('http').createServer((req, res) => {
 })
 const io = require('socket.io')(server)
 
-const RandomManager = require('RoomManager.js')
+const RandomManager = require('./RoomManager.js')
 const RM = new RandomManager()
-const BattleManager = require('BattleManager.js')
+const BattleManager = require('./BattleManager.js')
 
 const stageLen = 1
 
@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
         break
       case 1: //バトル開始
         console.log();
-        
+
         socket.emit('btl_start', name) //TODO
         break
       case 2: //バトル復帰
