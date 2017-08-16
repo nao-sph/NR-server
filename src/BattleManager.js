@@ -38,7 +38,6 @@ class BattleManager { // playerそれぞれのIDと、一つ前のコマンド�
       }
     }
   }
-
 }
 
 class pStatus {

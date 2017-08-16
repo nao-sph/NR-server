@@ -39,7 +39,14 @@ class RoomManager {
       }
     }
   }
-
+  getRmfrompID (pID) {//TODO
+    for (let i = 0; i < this.rooms.length; i++) {
+      if(this.rooms[i].ID === roomID) {
+        this.rooms[i].splice(i,1)
+        return
+      }
+    }
+  }
 }
 
 class Room {
@@ -47,6 +54,7 @@ class Room {
     this.ID = this.genRanStr(8)
     this.members = [player]
     this.bm = null
+    this.stageNum = null
     this.isFull = false
   }
 
