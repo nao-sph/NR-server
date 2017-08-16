@@ -1,36 +1,46 @@
 # NR-server
 クライアントサイドからみたAPI
-## SocketIO標準
-### socket.connect()
-これをやるとはじまるっぽい
-### on "connect"
-接続したら自動的に返ってくる
-### data
-配列になってるっぽい
+送られてくるのはJSON
 
 ## RoomManager
-### emit "access"
-nameを送る
-on "waiting2P"か on "start_battle"で返ってくる
+ルームとplayerの情報を管理する
+### emit "rm_access"
+name、character番号を送る
+on "wait"か on "start_battle"がくる
 disconnect後復帰した場合を後で実装
 
-### on "waiting2P"
+### on "rm_wait"
 人が揃うのを待っている状態を描画してねー
 
-### on "start_battle"
-バトル開始でページ遷移してねー
+### on "btl_start"
+相手のname, character番号、stage番号を受け取る
+バトル開始だよーページ遷移してねー
 
-### on "return_to_battle"
+### on "btl_return"
 後で
 
 ## BattleManager
-基本的に体力の管理しかしない
+playerそれぞれのIDと、一つ前のコマンドを保持する
 
-### emit "command" //TODO
-commandを送る (0:Atk, 1:Magi, 2:Brr, 3:Chrg)
-両方揃ったら（？） on "turn_result"
+### emit "cmd_mine"
+commandを送る (0~3)
 
-### on "turn_result" //TODO
-バトルステータス (0:continue, 1:p1 lose, 2:p2 lose, 3:draw)とともに
-現在の敵味方の体力を返す
-0以外のときはリザルト画面に遷移してねー
+### emit "cmd_timeup"
+時間切れ。特に何も送らない
+
+### on "cmd_enemy"
+コマンドが双方出揃う、または一定時間経過で相手のコマンドが送られてくる
+時間切れ、通信が切れはランダム
+
+### emit "btl_end"
+バトルが終了したらこれを送ろう
+ルームを消す
+
+## SocketIO標準
+### socket.connect()
+これをやるとはじまる予感
+### on "connect"
+接続したら自動的に返ってくる
+### data
+JSONが入ってるんじゃないかなー。たぶん
+でも配列っぽい？
