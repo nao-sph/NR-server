@@ -5,7 +5,7 @@
 ##test
 ## emit "in_socket"
 on "in_ok"で返ってくる
-##emit "out_socket"
+## emit "out_socket"
 on "out_ok"で返ってくる
 
 ## RoomManager
