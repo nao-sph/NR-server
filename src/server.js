@@ -55,6 +55,11 @@ io.on('connection', (socket) => {
     socket.emit('from_server', 'welcome')
   })
 
+  socket.on('in_socket', () => {
+    console.log('in_socket');
+    socket.emit('in_ok', null)
+  })
+
 
   // BattleManager
   socket.on('cmd_mine', () => {
@@ -64,6 +69,10 @@ io.on('connection', (socket) => {
   socket.on('cmd_timeup', () => {
 
   })
+})
+
+socket.on('out_socket)', () => {
+  socket.emit('out_ok', null)
 })
 
 let port = 3000
