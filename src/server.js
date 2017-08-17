@@ -28,8 +28,8 @@ io.on('connection', (socket) => {
 
   // RoomManager
   socket.on('rm_access', (data) => { //配列をJSON
-    let name = JSON.parse(data)[0]
-    let charaNum = JSON.parse(data)[1]
+    let name = JSON.parse(data)[name]
+    let charaNum = JSON.parse(data)[charaNum]
     console.log(`${name} accessed`)
     let id = socket.id
     let getRmInfo = RM.access(new Player(id, name, charaNum))
