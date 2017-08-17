@@ -71,9 +71,9 @@ io.on('connection', (socket) => {
   })
 })
 
-socket.on('out_socket)', () => {
-  socket.emit('out_ok', null)
-})
+// socket.on('out_socket)', () => {
+//   socket.emit('out_ok', null)
+// })
 
 let port = 3000
 server.listen(port)
