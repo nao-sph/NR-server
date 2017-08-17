@@ -59,6 +59,12 @@ io.on('connection', (socket) => {
     console.log('in_socket');
     socket.emit('in_ok', null)
   })
+  
+  //ここを追加
+   socket.on('in_socket1' , () => {
+    console.log('in_socket1');
+    socket.emit('in_ok1' , null)
+  })
 
 
   // BattleManager
