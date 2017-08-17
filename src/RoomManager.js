@@ -1,6 +1,7 @@
 class RoomManager {
   constructor () {
     this.rooms = []
+    this.players = []
   }
 
   // playerはID、name、roomIDをkeyにもつインスタンス(server.js)

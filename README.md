@@ -2,6 +2,12 @@
 クライアントサイドからみたAPI  
 送られてくるのはJSON
 
+##test
+## emit "in_socket"
+on "in_ok"で返ってくる
+##emit "out_socket"
+on "out_ok"で返ってくる
+
 ## RoomManager
 ルームとplayerの情報を管理する
 ### emit "rm_access"
