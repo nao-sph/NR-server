@@ -5,7 +5,7 @@
 ## RoomManager
 ルームとplayerの情報を管理する
 ### emit "rm_access"
-[name, charaNum] を送る  
+{"name": "タロー", "charaNum": 0} を送る  
 on "wait"か on "start_battle"がくる  
 disconnect後復帰した場合を後で実装  
 
