@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
 
   // BattleManager
   socket.on('cmd_mine', () => {
-    let data =
+    let data = 0//TODO
     socket.emit('cmd_enemy', JSON.stringify(data))
   })
   socket.on('cmd_timeup', () => {
