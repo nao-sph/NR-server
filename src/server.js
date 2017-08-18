@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
     console.log('in_socket');
     socket.emit('in_ok', null)
   })
-  
+
   //ここを追加
    socket.on('in_socket1' , () => {
     console.log('in_socket1');
@@ -81,6 +81,6 @@ io.on('out_socket)', () => {
   socket.emit('out_ok', null)
 })
 
-let port = 3000
+let port = server.listen(process.env.PORT || 3000);
 server.listen(port)
 console.log(`running on port: ${port}`)
