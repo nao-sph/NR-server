@@ -14,8 +14,10 @@ class RoomManager {
   deleteUser (uid) { //部屋から人を消す
     let rid = this.getRoomInfo(uid).id
     if(rid === -1) return
-    this.rooms[rid].leaveUser(uid)
-    if(this.rooms[rid].members.length === 0){
+    let idx = this.getIdx(rid)
+    if(idx === -1) return
+    this.rooms[idx].leaveUser(uid)
+    if(this.rooms[idx].members.length === 0){
       this.delete(rid)
     }
   }
