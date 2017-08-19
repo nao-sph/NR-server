@@ -23,7 +23,8 @@ class RoomManager {
   }
   getRoomInfo (uid) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if(this.rooms[i].exists(uid)) return this.rooms[this.getIdx(rid)]
+      let ridx = this.rooms[i].getIdx(uid)
+      if(ridx === -1) return this.rooms[ridx]
     }
     return -1
   }
