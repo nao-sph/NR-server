@@ -77,6 +77,7 @@ io.on('connection', (socket) => {
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
       io.to(socket.id).emit('to_room_without_self', data)
+      return
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
       let uid = roomInfo.members[i].id
@@ -92,10 +93,10 @@ io.on('connection', (socket) => {
       // return -1:makroom, 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
       case -1: // makeroom
 
-        break;
+        break
       case 0: // join but still not full
 
-        break;
+        break
       case 1: // join and full 満員になったからルームの全員に送信
         let roomInfo = RM.getRoomInfo(socket.id)
         if(roomInfo === -1) {
@@ -106,17 +107,17 @@ io.on('connection', (socket) => {
         for(let i = 0; i < roomInfo.members.length; i++) {
           io.to(roomInfo.members[i].id).emit('rm_full', JSON.stringify(withError(data, null)))
         }
-        break;
+        break
       case 2: // room is full
         err = new Error("room is full")
         console.log('to_self', JSON.stringify(withError(data, err)))
         io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
-        break;
+        break
       case 3: // this user already ezists
         err = new Error("this user already ezists")
         console.log('to_self', JSON.stringify(withError(data, err)))
         io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
-        break;
+        break
     }
   })
 })
