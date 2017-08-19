@@ -1,62 +1,77 @@
 class RoomManager {
   constructor () {
     this.rooms = []
-    this.players = []
   }
 
-  // playerはID、name、roomIDをkeyにもつインスタンス(server.js)
-  // returnは[数字, Room]　最初の数字は0:待機、1:開始、2:復帰
-  access (player) {
-    // playerがすでにroomIDを持っていた時の処理
-    if (player.roomID !== null) {
-      for(let i = 0; i < this.rooms.length; i++) {
-        if (player.roomID === this.rooms[i].ID) {
-          return [2, this.room[i]]
-        }
-      }
-    }
-
-    // 既存の部屋を全てみて空きがあれば入る
-    for (let i = 0; i < this.rooms.length; i++){
-      if(!(this.rooms[i].isFull)) {
-        this.rooms[i].members.push(player)
-        player.roomID = this.rooms[i].ID
-        this.rooms[i].isFull = true
-        return [1, this.rooms[i]]
-      }
-    }
-    // なければ作成
-    let room = new Room(player)
-    this.rooms.push(room)
-    player.roomID = room.ID
-    return [0, null]
+  make (user, full) { //fullは定員数
+    this.rooms.push(new Room(user, full))
   }
-
-  delete (roomID) {
+  delete (rid) {
+    this.rooms.splice(this.getIdx(rid), 1)
+  }
+  getRoomInfo (uid) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if(this.rooms[i].ID === roomID) {
-        this.rooms[i].splice(i,1)
-        return
-      }
+      if(this.rooms[i].exists(uid)) return this.rooms[this.getIdx(rid)]
     }
+    return -1
   }
-  getRmfrompID (pID) {//TODO
-    for (let i = 0; i < this.rooms.length; i++) {
-      if(this.rooms[i].ID === roomID) {
-        this.rooms[i].splice(i,1)
-        return
-      }
+
+  makeOrJoinMethod (user, full) {
+    // return -1:makroom, 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
+    let idx = this.getNotfullIdx()
+    if(idx === -1) {
+      make (user, full)
+      return -1
     }
+    return this.rooms[idx].joinUser(user)
+  }
+
+  getNotfullIdx () {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if(!(this.rooms[i].isFull)) return i
+    }
+    return -1
+  }
+  getIdx (rid) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if(this.rooms[i].id === rid) return
+    }
+    return -1
   }
 }
 
 class Room {
-  constructor (player) {
-    this.ID = this.genRanStr(8)
-    this.members = [player]
-    this.bm = null
-    this.stageNum = null
-    this.isFull = false
+  constructor (user, n) { //n:自然数 は定員
+    this.id = getRanStr(8)
+    this.members = [user]
+    this.full = Math.max(1, Math.ceil(n)) // 1以下だった場合は1として扱う。 1より大きい場合はMath.ceil
+    if(n <= 1) {
+      this.isFull = true
+    } else {
+      this.isFull = false
+    }
+  }
+
+  joinUser (user) { //return 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
+    if(this.isFull) return 2
+    if(this.getIdx(user.id) !== -1) return 3
+    this.members.push(user)
+    if(this.members.length >= this.full) {
+      this.isFull = true
+      return 1
+    }
+    return 0
+  }
+  exists (uid) {
+    if(this.getIdx(uid) === -1) return false
+    return true
+  }
+
+  getIdx (uid) {
+    for (let i = 0; i < this.members.length; i++) {
+      if(this.members[i].id === uid) return i
+    }
+    return -1
   }
 
   genRanStr (l) {

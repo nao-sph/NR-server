@@ -4,20 +4,24 @@ const server = require('http').createServer((req, res) => {
 })
 const io = require('socket.io')(server)
 
-const RandomManager = require('./RoomManager.js')
-const RM = new RandomManager()
-const BattleManager = require('./BattleManager.js')
-// const UserManager = require('./UserManager.js')
-// const UM = new UserManager()
+const RoomManager = require('./RoomManager.js')
+const RM = new RoomManager()
+const UserManager = require('./UserManager.js')
+const UM = new UserManager()
 
-const stageLen = 1
+class User {
+  constructor (id, data) {
+    this.id = id
+    this.data = data
+  }
+}
 
-class Player {
-  constructor (id, name, charaNum) {
-    this.ID = id
-    this.name = name
-    this.roomID = null
-    this.charaNum = charaNum
+let err
+function withError(obj, err) {
+  return {
+    success: !err,
+    msg: err ? err.message : null,
+    data: obj,
   }
 }
 
@@ -28,68 +32,58 @@ io.on('connection', (socket) => {
     console.log('client disconnected')
   })
 
-  socket.on('req_to_everyone', (data) => {
-    console.log('to_everyone', data)
-    socket.emit('to_everyone', data)
+  socket.on('req_to_everyone', (data) => { // socketに繋がってる全員
+    console.log('to_everyone', withError(data, null))
+    socket.emit('to_everyone', withError(data, null))
   })
-  socket.on('req_to_self', (data) => {
-    console.log('to_self', data)
-    io.to(socket.id).emit('to_self', data)
+  socket.on('req_to_self', (data) => { // 送った本人のみ
+    console.log('to_self', withError(data, null))
+    io.to(socket.id).emit('to_self', withError(data, null))
   })
-
-  // RoomManager
-  socket.on('rm_access', (data) => { //配列をJSON
-    let name = JSON.parse(data)[name]
-    let charaNum = JSON.parse(data)[charaNum]
-    console.log(`${name} accessed`)
-    let id = socket.id
-    let getRmInfo = RM.access(new Player(id, name, charaNum))
-    switch(getRmInfo[0]){ // 0:待機、1:開始、2:復帰
-      case 0: //待機
-        io.to(id).emit('rm_wait', null)
-        break
-      case 1: //バトル開始
-        let room = getRmInfo[1]
-        room.bm = new BattleManager(room.members[0].ID, room.members[1].ID)
-        let stageNum = Math.floor(Math.random * Math.stageLen)
-        let data0 = [room.members[0].name, room.members[0].charaNum, stageNum]
-        let data1 = [room.members[1].name, room.members[1].charaNum, stageNum]
-        io.to(room.members[0].ID).emit('btl_start', JSON.stringify(data1))
-        io.to(room.members[1].ID).emit('btl_start', JSON.stringify(data0))
-        break
-      case 2: //バトル復帰
-        io.to(id).emit('btl_return')
-        break
+  socket.on('req_to_room', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
+    console.log('to_room', withError(data, null))
+    let roomInfo = RM.getRoomInfo(socket.id)
+    if(roomInfo === -1) {
+      err = new Error("you haven't joined any room yet")
+      io.to(socke.id).emit('to_room', withError(data, err))
     }
-
-    console.log('send message')
-    socket.emit('from_server', 'welcome')
+    for(let i = 0; i < roomInfo.members.length; i++) {
+      io.to(roomInfo.members[i].id).emit('to_room', withError(data, null))
+    }
   })
 
-  socket.on('in_socket', () => {
-    console.log('in_socket');
-    socket.emit('in_ok', null)
+  //room処理
+  socket.on('rm_access', (data) => {
+    switch (makeOrJoinMethod(new User(socket.id, data), 2)) {
+      // return -1:makroom, 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
+      case -1: // makeroom
+
+        break;
+      case 0: // join but still not full
+
+        break;
+      case 1: // join and full 満員になったからルームの全員に送信
+        let roomInfo = RM.getRoomInfo(socket.id)
+        if(roomInfo === -1) {
+          err = new Error("you haven't joined any room yet")
+          io.to(socke.id).emit('rm_full', withError(data, err))
+        }
+        for(let i = 0; i < roomInfo.members.length; i++) {
+          io.to(roomInfo.members[i].id).emit('rm_full', withError(data, null))
+        }
+        break;
+      case 2: // room is full
+        err = new Error("room is full")
+        console.log('to_self', withError(data, err))
+        io.to(socket.id).emit('rm_full', withError(data, err))
+        break;
+      case 3: // this user already ezists
+        err = new Error("this user already ezists")
+        console.log('to_self', withError(data, err))
+        io.to(socket.id).emit('rm_full', withError(data, err))
+        break;
+    }
   })
-
-  //ここを追加
-   socket.on('in_socket1' , () => {
-    console.log('in_socket1');
-    socket.emit('in_ok1' , null)
-  })
-
-
-  // BattleManager
-  socket.on('cmd_mine', () => {
-    let data = 0//TODO
-    socket.emit('cmd_enemy', JSON.stringify(data))
-  })
-  socket.on('cmd_timeup', () => {
-
-  })
-})
-
-io.on('out_socket)', () => {
-  socket.emit('out_ok', null)
 })
 
 let port = server.listen(process.env.PORT || 3000);

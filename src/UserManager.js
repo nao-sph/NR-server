@@ -10,24 +10,24 @@ class UserManager {
     this.users.splice(this.getIdx(id), 1)
   }
   getData (id) {
-    this.users[getIdx(id)].data
+    let idx = this.getIdx(id)
+    if(idx === -1) {
+      console.log(`cannot find user: ${id}`);
+      return -1
+    }
+    return this.users[idx].data
+  }
+  setData (id, data) {
+    this.users[this.getIdx(id).data] = data
   }
 
   getIdx (id) {
     for (let i = 0; i < this.users.length; i++) {
-      if(this.users[i].ID === id) {
-        return i
-      }
+      if(this.users[i].id === id) return i
     }
     return -1
   }
 }
 
-class User {
-  constructor (id, data) {
-    this.ID = id
-    this.data = data
-  }
-}
 
-exports.module = UserManager
+module.exports = UserManager
