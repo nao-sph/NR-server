@@ -32,7 +32,7 @@ class RoomManager {
     // return -1:makroom, 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
     let idx = this.getNotfullIdx()
     if(idx === -1) {
-      make (user, full)
+      this.make (user, full)
       return -1
     }
     return this.rooms[idx].joinUser(user)
@@ -54,7 +54,7 @@ class RoomManager {
 
 class Room {
   constructor (user, n) { //n:自然数 は定員
-    this.id = getRanStr(8)
+    this.id = this.getRanStr(8)
     this.members = [user]
     this.full = Math.max(1, Math.ceil(n)) // 1以下だった場合は1として扱う。 1より大きい場合はMath.ceil
     this.isFull = false
