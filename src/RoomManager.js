@@ -70,6 +70,8 @@ class RoomManager {
 
 class Room {
   constructor (user, n) { //n:自然数 は定員
+    console.log('new Room')
+    console.log('user', user)
     this.id = this.genRanStr(8)
     this.members = [user]
     this.full = Math.max(1, Math.ceil(n)) // 1以下だった場合は1として扱う。 1より大きい場合はMath.ceil
