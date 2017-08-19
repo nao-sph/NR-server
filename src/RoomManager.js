@@ -12,8 +12,8 @@ class RoomManager {
     this.rooms.splice(idx, 1)
   }
   deleteUser (uid) { //部屋から人を消す
+    if(this.getRoomInfo(uid) === -1) return
     let rid = this.getRoomInfo(uid).id
-    if(rid === -1) return
     let idx = this.getIdx(rid)
     if(idx === -1) return
     this.rooms[idx].leaveUser(uid)

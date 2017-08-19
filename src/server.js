@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
     let roomInfo = RM.getRoomInfo(socket.id)
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
-      io.to(socke.id).emit('to_room', JSON.stringify(withError(data, err)))
+      io.to(socket.id).emit('to_room', JSON.stringify(withError(data, err)))
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
       io.to(roomInfo.members[i].id).emit('to_room', JSON.stringify(withError(data, null)))
@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
   //   let roomInfo = RM.getRoomInfo(socket.id)
   //   if(roomInfo === -1) {
   //     err = new Error("you haven't joined any room yet")
-  //     io.to(socke.id).emit('to_room_without_self', JSON.stringify(withError(data, err)))
+  //     io.to(socket.id).emit('to_room_without_self', JSON.stringify(withError(data, err)))
   //   }
   //   for(let i = 0; i < roomInfo.members.length; i++) {
   //     let uid = roomInfo.members[i].id
@@ -76,7 +76,7 @@ io.on('connection', (socket) => {
     let roomInfo = RM.getRoomInfo(socket.id)
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
-      io.to(socke.id).emit('to_room_without_self', data)
+      io.to(socket.id).emit('to_room_without_self', data)
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
       let uid = roomInfo.members[i].id
@@ -100,7 +100,7 @@ io.on('connection', (socket) => {
         let roomInfo = RM.getRoomInfo(socket.id)
         if(roomInfo === -1) {
           err = new Error("you haven't joined any room yet")
-          io.to(socke.id).emit('rm_full', JSON.stringify(withError(data, err)))
+          io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
         }
         for(let i = 0; i < roomInfo.members.length; i++) {
           io.to(roomInfo.members[i].id).emit('rm_full', JSON.stringify(withError(data, null)))
