@@ -37,11 +37,11 @@ io.on('connection', (socket) => {
 
   // socket.on('req_to_everyone', (data) => { // socketに繋がってる全員
   //   console.log('to_everyone', JSON.stringify(withError(data, null)))
-  //   socket.emit('to_everyone', JSON.stringify(withError(data, null)))
+  //   io.sockets.emit('to_everyone', JSON.stringify(withError(data, null)))
   // })
   socket.on('req_to_everyone', (data) => { // socketに繋がってる全員
     console.log('to_everyone', data)
-    socket.emit('to_everyone', data)
+    io.sockets.emit('to_everyone', data)
   })
   socket.on('req_to_self', (data) => { // 送った本人のみ
     console.log('to_self', JSON.stringify(withError(data, null)))
