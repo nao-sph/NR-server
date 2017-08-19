@@ -101,6 +101,7 @@ io.on('connection', (socket) => {
         if(roomInfo === -1) {
           err = new Error("you haven't joined any room yet")
           io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
+          break
         }
         for(let i = 0; i < roomInfo.members.length; i++) {
           io.to(roomInfo.members[i].id).emit('rm_full', JSON.stringify(withError(data, null)))
