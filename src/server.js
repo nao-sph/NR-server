@@ -27,7 +27,7 @@ function withError (obj, err) {
 
 io.on('connection', (socket) => {
   console.log('client connected')
-  UM.add(socket.id, null)
+  UM.add(new User(socket.id, null))
 
   socket.on('disconnect', () => {
     console.log('client disconnected')

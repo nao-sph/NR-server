@@ -3,8 +3,8 @@ class UserManager {
     this.users = []
   }
 
-  add (id, data) {
-    this.users.push(new User(id, data))
+  add (user) {
+    this.users.push(user)
   }
   delete (id) {
     this.users.splice(this.getIdx(id), 1)
