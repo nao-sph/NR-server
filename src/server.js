@@ -26,11 +26,11 @@ function withError (obj, err) {
 }
 
 io.on('connection', (socket) => {
-  console.log('client connected')
+  console.log(`${socket.id} connected`)
   UM.add(new User(socket.id, null))
 
   socket.on('disconnect', () => {
-    console.log('client disconnected')
+    console.log(`${socket.id} disconnected`)
     UM.delete(socket.id)
     RM.deleteUser(socket.id)
   })
@@ -87,6 +87,7 @@ io.on('connection', (socket) => {
 
   //room処理
   socket.on('rm_access', (data) => {
+    console.log(`${socket.id} accessed`)
     switch (makeOrJoinMethod(new User(socket.id, data), 2)) {
       // return -1:makroom, 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
       case -1: // makeroom
