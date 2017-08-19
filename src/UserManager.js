@@ -23,9 +23,11 @@ class UserManager {
   }
 }
 
-class User (id, data) {
-  constructor () {
+class User {
+  constructor (id, data) {
     this.ID = id
     this.data = data
   }
 }
+
+exports.module = UserManager

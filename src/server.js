@@ -7,8 +7,8 @@ const io = require('socket.io')(server)
 const RandomManager = require('./RoomManager.js')
 const RM = new RandomManager()
 const BattleManager = require('./BattleManager.js')
-const UserManager = require('./UserManager.js')
-const UM = new UserManager()
+// const UserManager = require('./UserManager.js')
+// const UM = new UserManager()
 
 const stageLen = 1
 
