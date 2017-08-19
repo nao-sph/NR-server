@@ -72,16 +72,16 @@ io.on('connection', (socket) => {
   //   }
   // })
   socket.on('req_to_room_without_self', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
-    console.log('to_room_without_self', data))
+    console.log('to_room_without_self', data)
     let roomInfo = RM.getRoomInfo(socket.id)
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
-      io.to(socke.id).emit('to_room_without_self', data))
+      io.to(socke.id).emit('to_room_without_self', data)
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
       let uid = roomInfo.members[i].id
       if(uid === socket.id) continue
-      io.to().emit('to_room_without_self', data))
+      io.to().emit('to_room_without_self', data)
     }
   })
 
