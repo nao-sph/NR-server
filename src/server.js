@@ -7,6 +7,8 @@ const io = require('socket.io')(server)
 const RandomManager = require('./RoomManager.js')
 const RM = new RandomManager()
 const BattleManager = require('./BattleManager.js')
+const UserManager = require('./UserManager.js')
+const UM = new UserManager()
 
 const stageLen = 1
 
@@ -24,6 +26,15 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('client disconnected')
+  })
+
+  socket.on('req_to_everyone', (data) => {
+    console.log('to_everyone', data)
+    socket.emit('to_everyone', data)
+  })
+  socket.on('req_to_self', (data) => {
+    console.log('to_self', data)
+    socke.emit('to_self', data)
   })
 
   // RoomManager
