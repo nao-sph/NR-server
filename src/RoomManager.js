@@ -36,7 +36,7 @@ class RoomManager {
     console.log('uid', uid)
     for (let i = 0; i < this.rooms.length; i++) {
       let ridx = this.rooms[i].getIdx(uid)
-      if(ridx === -1) return this.rooms[ridx]
+      if(ridx !== -1) return this.rooms[ridx]
     }
     return -1
   }
