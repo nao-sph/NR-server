@@ -100,6 +100,7 @@ io.on('connection', (socket) => {
       case 1: // join and full 満員になったからルームの全員に送信
         console.log('---------joined and full')
         let roomInfo = RM.getRoomInfo(socket.id)
+        console.log('roomInfo', roomInfo)
         if(roomInfo === -1) {
           err = new Error("you haven't joined any room yet")
           io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
