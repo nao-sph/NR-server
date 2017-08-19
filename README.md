@@ -2,16 +2,27 @@
 クライアントサイドからみたAPI  
 送られてくるのはJSON
 
-##test
-## emit "in_socket"
-on "in_ok"で返ってくる
-## emit "out_socket"
-on "out_ok"で返ってくる
+### emit "req_to_everyone"
+data を送る  
+on "to_everyone"で下の形式になって返ってくる  
+{　　
+  success: !err,　　
+  msg: err ? err.message : null,　　
+  data: data,　　
+}
+req_to_everyone', (data) => { // socketに繋がってる全員
+  console.log('to_everyone', withError(data, null))
+  socket.emit('to_everyone', withError(data, null))
+})
+socket.on('req_to_self', (data) => { // 送った本人のみ
+  console.log('to_self', withError(data, null))
+  io.to(socket.id).emit('to_self', withError(data, null))
+})
+socket.on('req_to_room', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
+  console.log('to_room'
 
-## RoomManager
-ルームとplayerの情報を管理する
 ### emit "rm_access"
-{"name": "タロー", "charaNum": 0} を送る  
+data を送る  
 on "wait"か on "start_battle"がくる  
 disconnect後復帰した場合を後で実装  
 

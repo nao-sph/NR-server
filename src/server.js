@@ -17,7 +17,7 @@ class User {
 }
 
 let err
-function withError(obj, err) {
+function withError (obj, err) {
   return {
     success: !err,
     msg: err ? err.message : null,
@@ -33,22 +33,22 @@ io.on('connection', (socket) => {
   })
 
   socket.on('req_to_everyone', (data) => { // socketに繋がってる全員
-    console.log('to_everyone', withError(data, null))
-    socket.emit('to_everyone', withError(data, null))
+    console.log('to_everyone', JSON.stringify(withError(data, null)))
+    socket.emit('to_everyone', JSON.stringify(withError(data, null)))
   })
   socket.on('req_to_self', (data) => { // 送った本人のみ
-    console.log('to_self', withError(data, null))
-    io.to(socket.id).emit('to_self', withError(data, null))
+    console.log('to_self', JSON.stringify(withError(data, null)))
+    io.to(socket.id).emit('to_self', JSON.stringify(withError(data, null)))
   })
   socket.on('req_to_room', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
-    console.log('to_room', withError(data, null))
+    console.log('to_room', JSON.stringify(withError(data, null)))
     let roomInfo = RM.getRoomInfo(socket.id)
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
-      io.to(socke.id).emit('to_room', withError(data, err))
+      io.to(socke.id).emit('to_room', JSON.stringify(withError(data, err)))
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
-      io.to(roomInfo.members[i].id).emit('to_room', withError(data, null))
+      io.to(roomInfo.members[i].id).emit('to_room', JSON.stringify(withError(data, null)))
     }
   })
 
@@ -66,21 +66,21 @@ io.on('connection', (socket) => {
         let roomInfo = RM.getRoomInfo(socket.id)
         if(roomInfo === -1) {
           err = new Error("you haven't joined any room yet")
-          io.to(socke.id).emit('rm_full', withError(data, err))
+          io.to(socke.id).emit('rm_full', JSON.stringify(withError(data, err)))
         }
         for(let i = 0; i < roomInfo.members.length; i++) {
-          io.to(roomInfo.members[i].id).emit('rm_full', withError(data, null))
+          io.to(roomInfo.members[i].id).emit('rm_full', JSON.stringify(withError(data, null)))
         }
         break;
       case 2: // room is full
         err = new Error("room is full")
-        console.log('to_self', withError(data, err))
-        io.to(socket.id).emit('rm_full', withError(data, err))
+        console.log('to_self', JSON.stringify(withError(data, err)))
+        io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
         break;
       case 3: // this user already ezists
         err = new Error("this user already ezists")
-        console.log('to_self', withError(data, err))
-        io.to(socket.id).emit('rm_full', withError(data, err))
+        console.log('to_self', JSON.stringify(withError(data, err)))
+        io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
         break;
     }
   })
