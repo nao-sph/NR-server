@@ -76,7 +76,7 @@ io.on('connection', (socket) => {
     let roomInfo = RM.getRoomInfo(socket.id)
     if(roomInfo === -1) {
       err = new Error("you haven't joined any room yet")
-      io.to(socket.id).emit('to_room_without_self', data)
+      io.to(socket.id).emit('to_room_without_self', "you haven't joined any room yet")//TODO ほんとはdata
       return
     }
     for(let i = 0; i < roomInfo.members.length; i++) {
