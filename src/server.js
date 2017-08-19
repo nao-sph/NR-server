@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
   })
   socket.on('req_to_self', (data) => {
     console.log('to_self', data)
-    socke.emit('to_self', data)
+    io.to(socket.id).emit('to_self', data)
   })
 
   // RoomManager
