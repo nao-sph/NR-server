@@ -4,60 +4,48 @@
 
 ### emit "req_to_everyone"
 data を送る  
-on "to_everyone"で下の形式になって返ってくる  
-{　　
-  success: !err,　　
-  msg: err ? err.message : null,　　
-  data: data,　　
-}
-req_to_everyone', (data) => { // socketに繋がってる全員
-  console.log('to_everyone', withError(data, null))
-  socket.emit('to_everyone', withError(data, null))
-})
-socket.on('req_to_self', (data) => { // 送った本人のみ
-  console.log('to_self', withError(data, null))
-  io.to(socket.id).emit('to_self', withError(data, null))
-})
-socket.on('req_to_room', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
-  console.log('to_room'
+**on "to_everyone"** で下の形式になって、*socketに繋がってる全員* に送られる  
+{  
+  "success": !err,  
+  "msg": err ? err.message : null,  
+  "data": data　
+}  
+
+### emit "req_to_self"
+data を送る  
+**on "to_self"** で下の形式になって、*自分自身のみ* に送られる  
+{  
+  "success": !err,  
+  "msg": err ? err.message : null,  
+  "data": data　
+}  
+
+### emit "req_to_room"
+(roomが使われてる時のみ)   
+data を送る  
+**on "to_room"** で下の形式になって、*自分の所属するroomの全員* に送られる  
+{  
+  "success": !err,  
+  "msg": err ? err.message : null,  
+  "data": data　
+}  
 
 ### emit "rm_access"
 data を送る  
-on "wait"か on "start_battle"がくる  
-disconnect後復帰した場合を後で実装  
+満員になった時のみ、**on "rm_full"** に送られる　　
+{  
+  "success": !err,  
+  "msg": err ? err.message : null,  
+  "data": data　
+}  
 
-### on "rm_wait"
-人が揃うのを待っている状態を描画してねー
-
-### on "btl_start"
-JSON形式[相手のname, 相手のcharaNum, stage番号]を受け取る  
-バトル開始だよーページ遷移してねー
-
-### on "btl_return"
-復帰の実装。後で
-
-## BattleManager
-playerそれぞれのIDと、一つ前のコマンドを保持する
-
-### emit "cmd_mine"
-commandを送る (0~3)
-
-### emit "cmd_timeup"
-時間切れ。特に何も送らない
-
-### on "cmd_enemy"
-コマンドが双方出揃う、または一定時間経過で相手のコマンドが送られてくる  
-時間切れ、通信が切れはランダム
-
-### emit "btl_end"
-バトルが終了したらこれを送ろう  
-ルームを消す
-
-## SocketIO標準
+## SocketIO標準(swift io client)
 ### socket.connect()
-これをやるとはじまる予感
+これを実行すると通信が始まる　　
+
 ### on "connect"
-接続したら自動的に返ってくる
+接続したら自動的に送られる　　
+
 ### data
 JSONが入ってるんじゃないかなー。たぶん  
 でも配列っぽい？

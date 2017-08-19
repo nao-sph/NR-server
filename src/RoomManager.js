@@ -6,8 +6,18 @@ class RoomManager {
   make (user, full) { //fullは定員数
     this.rooms.push(new Room(user, full))
   }
-  delete (rid) {
-    this.rooms.splice(this.getIdx(rid), 1)
+  delete (rid) { //部屋を消す
+    let idx = this.getIdx(rid)
+    if(idx === -1) return
+    this.rooms.splice(idx, 1)
+  }
+  deleteUser (uid) { //部屋から人を消す
+    let rid = this.getRoomInfo(uid).id
+    if(rid === -1) return
+    this.rooms[rid].leaveUser(uid)
+    if(this.rooms[rid].members.length === 0){
+      this.delete(rid)
+    }
   }
   getRoomInfo (uid) {
     for (let i = 0; i < this.rooms.length; i++) {
@@ -45,28 +55,35 @@ class Room {
     this.id = getRanStr(8)
     this.members = [user]
     this.full = Math.max(1, Math.ceil(n)) // 1以下だった場合は1として扱う。 1より大きい場合はMath.ceil
-    if(n <= 1) {
-      this.isFull = true
-    } else {
-      this.isFull = false
-    }
+    this.isFull = false
+    this.checkFull()
   }
 
   joinUser (user) { //return 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
     if(this.isFull) return 2
     if(this.getIdx(user.id) !== -1) return 3
     this.members.push(user)
-    if(this.members.length >= this.full) {
-      this.isFull = true
-      return 1
-    }
+    if(this.checkFull()) return 1
     return 0
+  }
+  leaveUser (uid) {
+    this.members.splice(this.getIdx(uid),1)
+    this.checkFull()
   }
   exists (uid) {
     if(this.getIdx(uid) === -1) return false
     return true
   }
 
+  checkFull () {
+    if(this.members.length >= this.full) {
+      this.isFull = true
+      return true
+    } else {
+      this.isFull = false
+      return false
+    }
+  }
   getIdx (uid) {
     for (let i = 0; i < this.members.length; i++) {
       if(this.members[i].id === uid) return i

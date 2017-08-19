@@ -27,9 +27,12 @@ function withError (obj, err) {
 
 io.on('connection', (socket) => {
   console.log('client connected')
+  UM.add(socket.id, null)
 
   socket.on('disconnect', () => {
     console.log('client disconnected')
+    UM.delete(socket.id)
+    RM.deleteUser(socket.id)
   })
 
   socket.on('req_to_everyone', (data) => { // socketに繋がってる全員
