@@ -9,14 +9,14 @@ class RoomManager {
     console.log('full', full)
     this.rooms.push(new Room(user, full))
   }
-  delete (rid) { //部屋を消す
+  delete (rid) { //部屋を消す//TODO
     console.log('RM.delete')
     console.log('rid', rid)
     let idx = this.getIdx(rid)
     if(idx === -1) return
     this.rooms.splice(idx, 1)
   }
-  deleteUser (uid) { //部屋から人を消す
+  deleteUser (uid) { //部屋から人を消す//TODO
     console.log('RM.deleteUser')
     console.log('uid', uid)
     let room = this.getRoomInfo()
@@ -31,7 +31,7 @@ class RoomManager {
       this.delete(rid)
     }
   }
-  getRoomInfo (uid) {
+  getRoomInfo (uid) {//TODO
     console.log('RM.getRoomInfo')
     console.log('uid', uid)
     for (let i = 0; i < this.rooms.length; i++) {
@@ -41,7 +41,7 @@ class RoomManager {
     return -1
   }
 
-  makeOrJoinMethod (user, full) {
+  makeOrJoinMethod (user, full) {//TODO
     console.log('RM.makeOrJoinMethod')
     console.log('user', user)
     console.log('full', full)
@@ -54,22 +54,22 @@ class RoomManager {
     return this.rooms[idx].joinUser(user)
   }
 
-  getNotfullIdx () { // 満室じゃない部屋のidxをとる
+  getNotfullIdx () { // 満室じゃない部屋のidxをとる//TODO
     for (let i = 0; i < this.rooms.length; i++) {
       if(!(this.rooms[i].isFull)) return i
     }
     return -1
   }
-  getIdx (rid) {
+  getIdx (rid) {//TODO
     for (let i = 0; i < this.rooms.length; i++) {
-      if(this.rooms[i].id === rid) return
+      if(this.rooms[i].id === rid) return i
     }
     return -1
   }
 }
 
 class Room {
-  constructor (user, n) { //n:自然数 は定員
+  constructor (user, n) { //n:自然数 は定員//TODO
     console.log('new Room')
     console.log('user', user)
     this.id = this.genRanStr(8)
@@ -80,7 +80,7 @@ class Room {
   }
 
   joinUser (user) { //return 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
-    console.log('Room.joinUser')
+    console.log('Room.joinUser')//TODO
     console.log('user',user)
     if(this.isFull) return 2
     if(this.getIdx(user.id) !== -1) return 3
@@ -88,7 +88,7 @@ class Room {
     if(this.checkFull()) return 1
     return 0
   }
-  leaveUser (uid) {
+  leaveUser (uid) {//TODO
     console.log('Room.leaveUser')
     console.log('uid',uid)
     idx = this.getIdx(uid)
@@ -96,14 +96,14 @@ class Room {
     this.members.splice(idx,1)
     this.checkFull()
   }
-  exists (uid) {
+  exists (uid) {//TODO
     console.log('Room.exists')
     console.log('uid',uid)
     if(this.getIdx(uid) === -1) return false
     return true
   }
 
-  checkFull () {
+  checkFull () {//TODO
     console.log('Room.checkFull')
     if(this.members.length >= this.full) {
       this.isFull = true
@@ -113,14 +113,14 @@ class Room {
       return false
     }
   }
-  getIdx (uid) {
+  getIdx (uid) {//TODO
     for (let i = 0; i < this.members.length; i++) {
       if(this.members[i].id === uid) return i
     }
     return -1
   }
 
-  genRanStr (l) {
+  genRanStr (l) {//TODO
     let c = 'abcdefghijklmnopqrstuvwxyz0123456789'
     let r = ''
     for (let i = 0; i < l; i++) {
