@@ -54,7 +54,7 @@ class RoomManager {
     return this.rooms[idx].joinUser(user)
   }
 
-  getNotfullIdx () {
+  getNotfullIdx () { // 満室じゃない部屋のidxをとる
     for (let i = 0; i < this.rooms.length; i++) {
       if(!(this.rooms[i].isFull)) return i
     }
@@ -91,7 +91,9 @@ class Room {
   leaveUser (uid) {
     console.log('Room.leaveUser')
     console.log('uid',uid)
-    this.members.splice(this.getIdx(uid),1)
+    idx = this.getIdx(uid)
+    if(idx === -1) return
+    this.members.splice(idx,1)
     this.checkFull()
   }
   exists (uid) {

@@ -4,10 +4,10 @@ const server = require('http').createServer((req, res) => {
 })
 const io = require('socket.io')(server)
 
+// const UserManager = require('./UserManager.js')
+// const UM = new UserManager()
 const RoomManager = require('./RoomManager.js')
 const RM = new RoomManager()
-const UserManager = require('./UserManager.js')
-const UM = new UserManager()
 
 class User {
   constructor (id, data) {
@@ -27,11 +27,11 @@ function withError (obj, err) {
 
 io.on('connection', (socket) => {
   console.log(`${socket.id} connected`)
-  UM.add(new User(socket.id, null))
+  // UM.add(new User(socket.id, null))
 
   socket.on('disconnect', () => {
     console.log(`${socket.id} disconnected`)
-    UM.delete(socket.id)
+    // UM.delete(socket.id)
     RM.deleteUser(socket.id)
   })
 
