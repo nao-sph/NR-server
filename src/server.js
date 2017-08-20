@@ -110,7 +110,7 @@ io.on('connection', (socket) => {
         }
         turnCount(RM.getRoomInfo(socket.id).users)
         function turnCount(users) {
-          let msec = 15000 //msecごとにくりかえし
+          let msec = 40000 //msecごとにくりかえし
           let turnNum = 0
           let loop = setInterval(() => {
             turnNum++
