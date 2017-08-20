@@ -79,8 +79,8 @@ io.on('connection', (socket) => {
     }
     for(let i = 0; i < RM.getRoomInfo(socket.id).members.length; i++) {
       let uid = RM.getRoomInfo(socket.id).members[i].id
-      if(uid === socket.id) continue
-      io.to().emit('to_room_without_self', data)
+      if(uid !== socket.id) continue
+      io.to(uid).emit('to_room_without_self', data)
       console.log('emit "to_room_without_self"',socket.id, data)
     }
   })
