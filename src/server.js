@@ -112,6 +112,9 @@ io.on('connection', (socket) => {
         function turnCount(users) {
           let msec = 20000 //msecごとにくりかえし
           let turnNum = 1
+          for (let user of users) {
+            io.to(user.id).emit('turn_start', turnNum)
+          }
           let loop = setInterval(() => {
             for (let user of users) {
               io.to(user.id).emit('turn_start', turnNum)
