@@ -91,7 +91,7 @@ class Room {
   leaveUser (uid) {//TODO
     console.log('Room.leaveUser')
     console.log('uid',uid)
-    idx = this.getIdx(uid)
+    let idx = this.getIdx(uid)
     if(idx === -1) return
     this.members.splice(idx,1)
     this.checkFull()
