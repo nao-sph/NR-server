@@ -26,8 +26,8 @@ class RoomManager {
     if(idx === -1) return
     this.rooms[idx].leaveUser(uid)
     console.log('-------------checkpoint')
-    console.log(this.rooms[idx].members.length)
-    if(this.rooms[idx].members.length === 0){
+    console.log(this.rooms[idx].users.length)
+    if(this.rooms[idx].users.length === 0){
       this.delete(rid)
     }
   }
@@ -73,10 +73,14 @@ class Room {
     console.log('new Room')
     console.log('user', user)
     this.id = this.genRanStr(8)
-    this.members = [user]
+    this.users = [user]
     this.full = Math.max(1, Math.ceil(n)) // 1以下だった場合は1として扱う。 1より大きい場合はMath.ceil
     this.isFull = false
     this.checkFull()
+  }
+
+  startTurnCount () {
+
   }
 
   joinUser (user) { //return 0:join but still not full, 1:join and full, 2:room is full, 3:this user already exists
@@ -84,7 +88,7 @@ class Room {
     console.log('user',user)
     if(this.isFull) return 2
     if(this.getIdx(user.id) !== -1) return 3
-    this.members.push(user)
+    this.users.push(user)
     if(this.checkFull()) return 1
     return 0
   }
@@ -93,7 +97,7 @@ class Room {
     console.log('uid',uid)
     let idx = this.getIdx(uid)
     if(idx === -1) return
-    this.members.splice(idx,1)
+    this.users.splice(idx,1)
     this.checkFull()
   }
   exists (uid) {//TODO
@@ -105,7 +109,7 @@ class Room {
 
   checkFull () {//TODO
     console.log('Room.checkFull')
-    if(this.members.length >= this.full) {
+    if(this.users.length >= this.full) {
       this.isFull = true
       return true
     } else {
@@ -114,8 +118,8 @@ class Room {
     }
   }
   getIdx (uid) {//TODO
-    for (let i = 0; i < this.members.length; i++) {
-      if(this.members[i].id === uid) return i
+    for (let i = 0; i < this.users.length; i++) {
+      if(this.users[i].id === uid) return i
     }
     return -1
   }

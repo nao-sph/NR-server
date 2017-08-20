@@ -53,8 +53,8 @@ io.on('connection', (socket) => {
       err = new Error("you haven't joined any room yet")
       io.to(socket.id).emit('to_room', JSON.stringify(withError(data, err)))
     }
-    for(let i = 0; i < RM.getRoomInfo(socket.id).members.length; i++) {
-      io.to(RM.getRoomInfo(socket.id).members[i].id).emit('to_room', JSON.stringify(withError(data, null)))
+    for(let i = 0; i < RM.getRoomInfo(socket.id).users.length; i++) {
+      io.to(RM.getRoomInfo(socket.id).users[i].id).emit('to_room', JSON.stringify(withError(data, null)))
     }
   })
   // socket.RM.getRoomInfo(socket.id)('req_to_room_without_self', (data) => { // (roomが使われてる時のみ) 自分の所属するroomの全員
@@ -64,8 +64,8 @@ io.on('connection', (socket) => {
   //     err = new Error("you haven't joined any room yet")
   //     io.to(socket.id).emit('to_room_without_self', JSON.stringify(withError(data, err)))
   //   }
-  //   for(let i = 0; i < RM.getRoomInfo(socket.id).members.length; i++) {
-  //     let uid = RM.getRoomInfo(socket.id).members[i].id
+  //   for(let i = 0; i < RM.getRoomInfo(socket.id).users.length; i++) {
+  //     let uid = RM.getRoomInfo(socket.id).users[i].id
   //     if(uid === socket.id) continue
   //     io.to().emit('to_room_without_self', JSON.stringify(withError(data, null)))
   //   }
@@ -77,8 +77,8 @@ io.on('connection', (socket) => {
       io.to(socket.id).emit('to_room_without_self', "you haven't joined any room yet")//TODO ほんとはdata
       return
     }
-    for(let i = 0; i < RM.getRoomInfo(socket.id).members.length; i++) {
-      let uid = RM.getRoomInfo(socket.id).members[i].id
+    for(let i = 0; i < RM.getRoomInfo(socket.id).users.length; i++) {
+      let uid = RM.getRoomInfo(socket.id).users[i].id
       if(uid === socket.id) continue
       io.to(uid).emit('to_room_without_self', data)
       console.log('emit "to_room_without_self"',socket.id, data)
@@ -104,9 +104,20 @@ io.on('connection', (socket) => {
           io.to(socket.id).emit('rm_full', JSON.stringify(withError(data, err)))
           break
         }
-        for(let i = 0; i < RM.getRoomInfo(socket.id).members.length; i++) {
-          io.to(RM.getRoomInfo(socket.id).members[i].id).emit('rm_full', data)
-          console.log(`emit "rm_full" to ${RM.getRoomInfo(socket.id).members[i].id}`)
+        for(let i = 0; i < RM.getRoomInfo(socket.id).users.length; i++) {
+          io.to(RM.getRoomInfo(socket.id).users[i].id).emit('rm_full', data)
+          console.log(`emit "rm_full" to ${RM.getRoomInfo(socket.id).users[i].id}`)
+        }
+        turnCount(RM.getRoomInfo(socket.id).users)
+        function turnCount(users) {
+          let msec = 20000 //msecごとにくりかえし
+          let turnNum = 0
+          setInterval(() => {
+            for (let user of users) {
+              io.to(user.id).emit('turn_start', turnNum)
+            }
+            turnNum++
+          }, msec)
         }
         break
       case 2: // room is full
@@ -122,6 +133,8 @@ io.on('connection', (socket) => {
     }
   })
 })
+
+
 
 let port = server.listen(process.env.PORT || 3000);
 server.listen(port)
