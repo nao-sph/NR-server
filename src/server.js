@@ -111,10 +111,7 @@ io.on('connection', (socket) => {
         turnCount(RM.getRoomInfo(socket.id).users)
         function turnCount(users) {
           let msec = 20000 //msecごとにくりかえし
-          let turnNum = 1
-          for (let user of users) {
-            io.to(user.id).emit('turn_start', turnNum)
-          }
+          let turnNum = 0
           console.log('emit turn_start', users, turnNum)
           let loop = setInterval(() => {
             turnNum++
