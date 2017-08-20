@@ -115,11 +115,13 @@ io.on('connection', (socket) => {
           for (let user of users) {
             io.to(user.id).emit('turn_start', turnNum)
           }
+          console.log('emit turn_start', users, turnNum)
           let loop = setInterval(() => {
+            turnNum++
             for (let user of users) {
               io.to(user.id).emit('turn_start', turnNum)
             }
-            turnNum++
+            console.log('emit turn_start', users, turnNum)
             if(turnNum >= 5) clearInterval(loop)
           }, msec)
         }
